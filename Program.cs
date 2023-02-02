@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -9,6 +9,7 @@ internal class Program
         SpecialSquad specialSquad = new SpecialSquad();
 
         Console.WriteLine("Список солдат в спец отряде Барс, после пополнения солдатами с именем начиющимся на букву Б: ");
+
         specialSquad.ShowNewBars();
     }
 }
@@ -26,9 +27,13 @@ class SpecialSquad
 
     public void ShowNewBars()
     {
-        var newBars = _bars.Union(_storm.Where(soldier => soldier.Name.StartsWith("Б")));
 
-        foreach (var soldier in newBars)
+        var newBars = _storm.OrderBy(soldier => soldier.Name).TakeWhile(soldier => soldier.Name.StartsWith("Б")).ToList();
+        var newStorm = _storm.Except(newBars).ToList();
+        _bars.AddRange(newBars);
+        _storm = newStorm;
+
+        foreach (var soldier in _bars)
         {
             Console.WriteLine(soldier.Name + " - " + soldier.Armament + " " + soldier.Rank + " " + soldier.SoldiersLife);
         }
