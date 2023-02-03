@@ -27,11 +27,10 @@ class SpecialSquad
 
     public void ShowNewBars()
     {
+        var newBars = _storm.Where(soldier => soldier.Name.StartsWith("Б"));
 
-        var newBars = _storm.OrderBy(soldier => soldier.Name).TakeWhile(soldier => soldier.Name.StartsWith("Б")).ToList();
-        var newStorm = _storm.Except(newBars).ToList();
-        _bars.AddRange(newBars);
-        _storm = newStorm;
+        _storm = _storm.Except(newBars).ToList();
+        _bars = _bars.Union(newBars).ToList();
 
         foreach (var soldier in _bars)
         {
